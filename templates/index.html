@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="custom-card">
+            <div class="card-body-custom">
+                <h2 class="mb-4">Welcome to GenAI-Assisted Seizure Prediction</h2>
+                <p class="lead text-muted">A robust AI-powered system for early detection and explanation of epileptic
+                    seizures.</p>
+                <hr>
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 border rounded text-center h-100 bg-light">
+                            <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                            <h5>AI-Powered Prediction</h5>
+                            <p class="small">Utilizes Random Forest algorithms trained on 178 EEG features.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 border rounded text-center h-100 bg-light">
+                            <i class="fas fa-search-plus fa-3x text-info mb-3"></i>
+                            <h5>Explainable AI (XAI)</h5>
+                            <p class="small">SHAP analysis provides transparent reasoning for every prediction.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="{{ url_for('predict') }}" class="btn btn-primary-custom btn-lg">
+                        <i class="fas fa-play me-2"></i>Start Prediction
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="custom-card">
+            <div class="card-header-custom">System Status</div>
+            <div class="card-body-custom">
+                <ul class="list-unstyled">
+                    <li class="mb-3 d-flex justify-content-between">
+                        <span>Model Status</span>
+                        <span class="badge bg-success">Loaded</span>
+                    </li>
+                    <li class="mb-3 d-flex justify-content-between">
+                        <span>Active Patients</span>
+                        <span class="badge bg-primary">42</span>
+                    </li>
+                    <li class="mb-3 d-flex justify-content-between">
+                        <span>Alerts (Today)</span>
+                        <span class="badge bg-warning text-dark">3</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

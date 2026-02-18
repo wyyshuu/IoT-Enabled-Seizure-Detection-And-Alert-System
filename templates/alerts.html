@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="custom-card">
+            <div class="card-header-custom">
+                <i class="fas fa-bell me-2"></i>Recent System Alerts
+            </div>
+            <div class="card-body-custom">
+                {% if alerts %}
+                {% for alert in alerts %}
+                <div class="alert alert-{{ alert.type }} d-flex align-items-center mb-3">
+                    <div class="me-3">
+                        <i
+                            class="fas fa-{{ 'exclamation-circle' if alert.type == 'danger' else ('exclamation-triangle' if alert.type == 'warning' else 'info-circle') }} fa-2x"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <strong>{{ alert.time }}</strong>
+                        <p class="mb-0">{{ alert.message }}</p>
+                    </div>
+                    <button class="btn btn-sm btn-outline-{{ alert.type }}">View Details</button>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-center text-muted">No recent alerts.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="custom-card">
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-file-medical me-2"></i>Patient Records</span>
+                <form class="d-flex w-50" action="/history">
+                    <input class="form-control me-2" type="search" name="patient_id"
+                        placeholder="Enter Patient ID (e.g., PT-1001)" value="{{ patient.id }}">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="card-body-custom">
+                <!-- Patient Info -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded bg-opacity-10 border border-primary">
+                            <small class="text-muted d-block">Patient ID</small>
+                            <strong>{{ patient.id }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block">Age / Gender</small>
+                            <strong>{{ patient.age }} / {{ patient.gender }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block">Current Medication</small>
+                            <strong><i class="fas fa-pills me-2 text-warning"></i>{{ patient.medication }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Table -->
+                <h5 class="mb-3">Seizure Risk History</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Risk Assessment</th>
+                                <th>Probability</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in patient.history %}
+                            <tr>
+                                <td>{{ record.date }}</td>
+                                <td>
+                                    <span
+                                        class="badge bg-{{ 'danger' if record.risk == 'High' else ('warning' if record.risk == 'Moderate' else 'success') }}">
+                                        {{ record.risk }} Risk
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 6px; width: 100px;">
+                                        <div class="progress-bar bg-{{ 'danger' if record.risk == 'High' else ('warning' if record.risk == 'Moderate' else 'success') }}"
+                                            role="progressbar" style="width: {{ record.prob }}%"></div>
+                                    </div>
+                                </td>
+                                <td>Recorded</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

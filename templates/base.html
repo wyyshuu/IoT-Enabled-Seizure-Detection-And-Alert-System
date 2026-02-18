@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AurAlert - Seizure Prediction System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <!-- ChartJS for frontend charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4><i class="fas fa-brain"></i> AurAlert</h4>
+        <a href="{{ url_for('home') }}" class="{{ 'active' if page == 'home' else '' }}">
+            <i class="fas fa-home"></i> Dashboard
+        </a>
+        <a href="{{ url_for('predict') }}" class="{{ 'active' if page == 'predict' else '' }}">
+            <i class="fas fa-wave-square"></i> Predict Seizure
+        </a>
+        <a href="{{ url_for('explainability') }}" class="{{ 'active' if page == 'explainability' else '' }}">
+            <i class="fas fa-chart-bar"></i> Explainability
+        </a>
+        <a href="{{ url_for('history') }}" class="{{ 'active' if page == 'history' else '' }}">
+            <i class="fas fa-user-injured"></i> Patient History
+        </a>
+        <a href="{{ url_for('alerts') }}" class="{{ 'active' if page == 'alerts' else '' }}">
+            <i class="fas fa-bell"></i> Alerts & Logs
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-header">
+            <h3>{{ page|capitalize }}</h3>
+            <div class="d-flex align-items-center">
+                <span class="me-3"><i class="fas fa-user-md me-2"></i>Dr. Admin</span>
+                <span class="badge bg-success">System Online</span>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

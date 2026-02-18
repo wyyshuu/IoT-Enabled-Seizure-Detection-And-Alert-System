@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="custom-card">
+            <div class="card-header-custom">
+                <i class="fas fa-microscope me-2"></i>Explainable AI Analysis (SHAP)
+            </div>
+            <div class="card-body-custom">
+                <p>This section uses SHAP (SHapley Additive exPlanations) to interpret the model's decision-making
+                    process. The graph below illustrates the top EEG features that pushed the prediction towards a
+                    specific risk level.</p>
+
+                <div class="text-center mt-4">
+                    {% if shap_plot %}
+                    <img src="data:image/png;base64,{{ shap_plot }}" class="img-fluid border rounded p-2"
+                        alt="SHAP Plot">
+                    {% else %}
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-5">
+                    <h5>Key Observations:</h5>
+                    <ul>
+                        <li><strong>Higher Signal Intensity (X1):</strong> Strongly correlates with high risk
+                            classifications.</li>
+                        <li><strong>Low Entropy:</strong> Generally indicates stable brain activity (Low Risk).</li>
+                        <li><strong>Feature Interaction:</strong> The combination of Feature X2 and X5 often precedes
+                            seizure onset by 10-20 seconds.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

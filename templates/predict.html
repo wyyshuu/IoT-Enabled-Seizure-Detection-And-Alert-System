@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <!-- Input Form -->
+    <div class="col-lg-5">
+        <div class="custom-card">
+            <div class="card-header-custom">
+                <i class="fas fa-wave-square me-2"></i>EEG Signal Inputs
+            </div>
+            <div class="card-body-custom">
+                <form action="/predict" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Signal Intensity (X1 Demo)</label>
+                        <input type="number" step="any" class="form-control" name="X1" value="135" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Frequency Variance (X2 Demo)</label>
+                        <input type="number" step="any" class="form-control" name="X2" value="22" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amplitude Mean (X3 Demo)</label>
+                        <input type="number" step="any" class="form-control" name="X3" value="-5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Signal Entrophy (X4 Demo)</label>
+                        <input type="number" step="any" class="form-control" name="X4" value="405" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Peak Flux (X5 Demo)</label>
+                        <input type="number" step="any" class="form-control" name="X5" value="-12" required>
+                    </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary-custom">
+                            <i class="fas fa-bolt me-2"></i>Run Prediction
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="col-lg-7">
+        {% if result %}
+        <div class="custom-card border-{{ result.color }}">
+            <div class="card-header-custom text-{{ result.color }} bg-light">
+                Results Analysis
+                <span class="float-end small text-muted">{{ result.timestamp }}</span>
+            </div>
+            <div class="card-body-custom text-center">
+
+                <div class="risk-indicator risk-{{ result.class|lower|replace(' risk', '') }}">
+                    {{ result.probability }}%
+                </div>
+
+                <h3 class="text-{{ result.color }} mb-3">{{ result.class }} Detected</h3>
+
+                <div class="alert alert-light border mt-4 text-start">
+                    <h5><i class="fas fa-robot me-2 text-primary"></i>AI Explaination</h5>
+                    <p class="mb-0">{{ result.explanation }}</p>
+                </div>
+
+                {% if result.class == 'High Risk' %}
+                <div class="mt-4">
+                    <button class="btn btn-danger btn-lg w-100 wiggle-animation" id="alertBtn" onclick="sendAlert()">
+                        <i class="fas fa-exclamation-triangle me-2"></i>NOTIFY DOCTOR IMMEDIATELY
+                    </button>
+                    <p id="alertMsg" class="mt-2 text-success fw-bold" style="display:none;"></p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="custom-card d-flex align-items-center justify-content-center"
+            style="min-height: 400px; background-color: #f8f9fa; border: 2px dashed #dee2e6;">
+            <div class="text-center text-muted">
+                <i class="fas fa-chart-line fa-3x mb-3"></i>
+                <h5>Waiting for Input...</h5>
+                <p>Enter EEG parameters on the left to analyze.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    @keyframes wiggle {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        10% {
+            transform: rotate(-3deg);
+        }
+
+        20% {
+            transform: rotate(5deg);
+        }
+
+        30% {
+            transform: rotate(-5deg);
+        }
+
+        40% {
+            transform: rotate(2deg);
+        }
+
+        50% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(0deg);
+        }
+    }
+
+    .wiggle-animation {
+        animation: wiggle 1s infinite;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function sendAlert() {
+        var btn = document.getElementById('alertBtn');
+        var msg = document.getElementById('alertMsg');
+
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+        btn.disabled = true;
+        btn.classList.remove('wiggle-animation');
+
+        fetch('/simulate_alert', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-check me-2"></i>Alert Sent';
+                    btn.classList.add('btn-success');
+                    btn.classList.remove('btn-danger');
+                    msg.innerText = data.message;
+                    msg.style.display = 'block';
+                }, 1500);
+            });
+    }
+</script>
+{% endblock %}
